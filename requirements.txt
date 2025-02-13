@@ -1,0 +1,11 @@
+Flask
+request
+send_file
+jsonify
+datetime
+qrcode
+svgwrite
+iso3166
+python-stdnum
+cairosvg
+gunicorn
