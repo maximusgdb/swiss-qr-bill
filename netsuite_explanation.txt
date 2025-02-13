@@ -1,0 +1,20 @@
+To include the generated SVG file in your invoice template in NetSuite, you can follow these general steps:
+
+Store the SVG Markup in a Custom Field:
+When your scheduled script or web service generates the SVG (or when you generate it in any other process), save the SVG markup in a custom field on the invoice record (for example, a field with the internal ID custbody_qr_code).
+
+Prepare Your Advanced PDF/HTML Template:
+In NetSuite’s Advanced PDF/HTML templates (which use FreeMarker syntax), you can reference the custom field to embed the SVG directly into your PDF output.
+Important: The SVG content you generated includes an XML declaration (<?xml version="1.0" encoding="utf-8"?>). Many PDF rendering engines (such as the one NetSuite uses) may have issues when an XML declaration is present in inline markup. It’s best to remove this line before embedding.
+
+Embed the SVG Markup in the Template:
+In your template, use FreeMarker to output the SVG. For example, you might include something like the following in your template:
+
+<#-- Check if the QR code field has content -->
+<#if record.custbody_qr_code?has_content>
+    <#-- Remove the XML declaration if present -->
+    <#assign svgContent = record.custbody_qr_code?replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "")>
+    ${svgContent?html}
+</#if>
+
+
