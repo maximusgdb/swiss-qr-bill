@@ -1,6 +1,6 @@
 from flask import Flask, request, send_file, jsonify
 import datetime
-from qrbill import QRBill
+from qrbill.bill import QRBill
 import cairosvg
 from PIL import Image
 import os
@@ -47,10 +47,16 @@ def generate_bill():
         # Generate a clean timestamp in the format YYYYMMDD_HHMMSS
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        # Define filenames for SVG, PNG, and JPEG
-        svg_filename = f"my_bill_{timestamp}.svg"
-        png_filename = f"my_bill_{timestamp}.png"
+        # Define the output directory (relative to the script location)
+        output_dir = os.path.join(os.path.dirname(__file__), 'my_bills')
 
+        # Ensure the directory exists
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        # Define filenames for SVG and PNG with full path
+        svg_filename = os.path.join(output_dir, f"my_bill_{timestamp}.svg")
+        png_filename = os.path.join(output_dir, f"my_bill_{timestamp}.png")
 
         # Save the SVG file with the timestamp in its name
         my_bill.as_svg(svg_filename)
@@ -58,14 +64,11 @@ def generate_bill():
         # Convert the SVG file to PNG using cairosvg
         cairosvg.svg2png(url=svg_filename, write_to=png_filename)
 
-
-
         # Clean up temporary files
         os.remove(svg_filename)
 
-
         # Return the generated PNG file as a response
-        return send_file(png_filename, mimetype='image/png', as_attachment=True)
+        return send_file(png_filename, mimetype='image/png', as_attachment=True, download_name=f"qr_bill_{timestamp}.png")
 
     except Exception as e:
         # Handle errors and return an error response
