@@ -8,6 +8,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 COPY api/ api/
 COPY qrbill/ qrbill/
+COPY .env .env
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt

@@ -2,14 +2,33 @@ from flask import Flask, request, send_file, jsonify
 import datetime
 from qrbill.bill import QRBill
 import cairosvg
-from PIL import Image
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
+
+# Secure API Token
+API_TOKEN = os.getenv("API_TOKEN")
+
+def check_auth():
+    """Check if the request contains a valid API token in the Authorization header."""
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return False
+    token = auth_header.split(" ")[1]  # Extract token after "Bearer "
+    return token == API_TOKEN
+
 
 @app.route('/generate_bill', methods=['POST'])
 def generate_bill():
     try:
+        # Validate API token
+        if not check_auth():
+            return jsonify({"error": "Unauthorized: Invalid or missing API token"}), 401
+
         # Parse incoming JSON data
         data = request.json
 
@@ -48,8 +67,9 @@ def generate_bill():
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # Define filenames for SVG and PNG with full path
-        svg_filename = f"my_bill_{timestamp}.svg"
-        png_filename = f"my_bill_{timestamp}.png"
+        output_dir = "/tmp"
+        svg_filename = os.path.join(output_dir, f"my_bill_{timestamp}.svg")
+        png_filename = os.path.join(output_dir, f"my_bill_{timestamp}.png")
 
         # Save the SVG file with the timestamp in its name
         my_bill.as_svg(svg_filename)
