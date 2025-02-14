@@ -48,8 +48,9 @@ def generate_bill():
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # Define filenames for SVG and PNG with full path
-        svg_filename = f"my_bill_{timestamp}.svg"
-        png_filename = f"my_bill_{timestamp}.png"
+        output_dir = "/tmp"
+        svg_filename = os.path.join(output_dir, f"my_bill_{timestamp}.svg")
+        png_filename = os.path.join(output_dir, f"my_bill_{timestamp}.png")
 
         # Save the SVG file with the timestamp in its name
         my_bill.as_svg(svg_filename)
@@ -66,7 +67,6 @@ def generate_bill():
     except Exception as e:
         # Handle errors and return an error response
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
