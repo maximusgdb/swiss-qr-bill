@@ -1,11 +1,14 @@
+# API dependencies
 Flask
-request
-send_file
-jsonify
-datetime
+requests
+cairosvg
+pillow
+
+# bill.py dependencies
 qrcode
 svgwrite
 iso3166
 python-stdnum
-cairosvg
+
+# deployment dependencies
 gunicorn
