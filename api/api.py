@@ -47,16 +47,9 @@ def generate_bill():
         # Generate a clean timestamp in the format YYYYMMDD_HHMMSS
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        # Define the output directory (relative to the script location)
-        output_dir = os.path.join(os.path.dirname(__file__), 'my_bills')
-
-        # Ensure the directory exists
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
         # Define filenames for SVG and PNG with full path
-        svg_filename = os.path.join(output_dir, f"my_bill_{timestamp}.svg")
-        png_filename = os.path.join(output_dir, f"my_bill_{timestamp}.png")
+        svg_filename = f"my_bill_{timestamp}.svg"
+        png_filename = f"my_bill_{timestamp}.png"
 
         # Save the SVG file with the timestamp in its name
         my_bill.as_svg(svg_filename)
@@ -76,4 +69,4 @@ def generate_bill():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
