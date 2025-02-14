@@ -12,3 +12,6 @@ python-stdnum
 
 # deployment dependencies
 gunicorn
+
+# security dependencies
+python-dotenv
