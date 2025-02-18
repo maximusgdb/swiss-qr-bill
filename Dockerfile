@@ -14,7 +14,7 @@ COPY .env .env
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose port 5000
-EXPOSE 5000
+EXPOSE 8080
 
 # Command to run the app
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "api.api:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "--workers", "2", "api.api:app"]
