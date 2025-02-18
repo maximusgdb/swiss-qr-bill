@@ -8,6 +8,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 COPY api/ api/
 COPY qrbill/ qrbill/
+COPY swissqrcode-api-firebase.json swissqrcode-api-firebase.json
 COPY .env .env
 
 # Install dependencies

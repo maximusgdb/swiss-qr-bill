@@ -14,4 +14,4 @@ python-stdnum
 gunicorn
 
 # security dependencies
-python-dotenv
+firebase_admin

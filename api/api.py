@@ -3,6 +3,12 @@ import datetime
 from qrbill.bill import QRBill
 import cairosvg
 import os
+import firebase_admin
+from firebase_admin import credentials
+
+# Provide the path to your downloaded JSON file
+cred = credentials.Certificate('swissqrcode-api-firebase.json')
+firebase_admin.initialize_app(cred)
 
 app = Flask(__name__)
 
