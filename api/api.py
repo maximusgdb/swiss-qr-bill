@@ -3,12 +3,32 @@ import datetime
 from qrbill.bill import QRBill
 import cairosvg
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
+
+# Secure API Token
+API_TOKEN = [os.getenv("API_TOKEN_1"), os.getenv("API_TOKEN_2"), os.getenv("API_TOKEN_3")]
+print(API_TOKEN)
+
+def check_auth():
+    """Check if the request contains a valid API token in the Authorization header."""
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return False
+    token = auth_header.split(" ")[1]  # Extract token after "Bearer "
+    return token in API_TOKEN  # Check if the token is in the list of valid tokens
 
 @app.route('/generate_bill', methods=['POST'])
 def generate_bill():
     try:
+        # Validate API token
+        if not check_auth():
+            return jsonify({"error": "Unauthorized: Invalid or missing API token"}), 401
+
         # Parse incoming JSON data
         data = request.json
 
